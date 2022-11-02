@@ -13,6 +13,7 @@ export function useReadBodac(url: string): [Function, string] {
               dataset:"annonces-commerciales",
               q: "497984146",
               limit: 10,
+              refine: encodeURIComponent(JSON.stringify({familleavis_lib : "Procédures de conciliation"}))
             }
           })
 
