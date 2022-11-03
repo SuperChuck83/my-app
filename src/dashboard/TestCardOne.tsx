@@ -11,7 +11,12 @@ const TestCardOne: React.FunctionComponent<{}> = () => {
 
   const onClickRechercher = async () => {
     const response = await callBodac();
-    debugger;
+ 
+    if(response.status === 200 )
+    {
+      const records = response.data.records;
+      debugger;
+    }
   }
 
   return (

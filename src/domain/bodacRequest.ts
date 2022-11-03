@@ -15,7 +15,7 @@ interface bodacParameters {
 }
 
 
-interface bodacRecords {
+export interface bodacRecords {
     datasetid: string,
     recordid: string,
     fields :  bodacFields, 
