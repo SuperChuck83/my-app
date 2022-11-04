@@ -6,7 +6,7 @@ export function isSiretValid(Siret?: string | null): boolean {
 
     let estValide: boolean = false;
     //algo siret validation ou pas,
-    if ((Siret.length !== 14) || isNaN(Number(Siret))) {
+    if ((Siret.length !== 9) || isNaN(Number(Siret))) {
         estValide = false;
     } else {
         // Donc le SIRET est un numérique à 14 chiffres
@@ -17,7 +17,7 @@ export function isSiretValid(Siret?: string | null): boolean {
         let tmp: number;
         let cpt: number = 0;
         for (cpt = 0; cpt < Siret.length; cpt++) {
-            if ((cpt % 2) == 0) { // Les positions impaires : 1er, 3è, 5è, etc...
+            if ((cpt % 2) === 1) { // Les positions impaires : 1er, 3è, 5è, etc...
                 tmp = parseInt(Siret.charAt(cpt)) * 2; // On le multiplie par 2
                 if (tmp > 9) {
                     tmp -= 9;
@@ -27,7 +27,7 @@ export function isSiretValid(Siret?: string | null): boolean {
             }
             somme += tmp;
         }
-        if ((somme % 10) == 0) {
+        if ((somme % 10) === 0) {
             estValide = true;
         } else { // Si la somme est un multiple de 10 alors le SIRET est valide
             estValide = false;

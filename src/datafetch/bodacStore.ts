@@ -4,18 +4,17 @@ import { bodacRequest } from "../domain/bodacRequest";
 
 export function useReadBodac(
   url: string
-): [() => Promise<AxiosResponse<bodacRequest>>, string] {
+): [(siret: string, refine: Object) => Promise<AxiosResponse<bodacRequest>>, string] {
   const instance = axios.create({
     baseURL: "https://bodacc-datadila.opendatasoft.com/api/records/1.0/search",
   });
 
-  const call = () => {
+  const call = (siret: string, refine : Object) => {
     const params = {
       dataset: "annonces-commerciales",
-      q: "497984146",
+      q: siret,
       limit: 10,
-      // "refine.familleavis_lib" : "Procédures de conciliation"
-      refine: { familleavis_lib: "Dépôts des comptes" },
+      refine: refine,
       sort: "dateparution",
       facet: ["1", "2"],
     };
