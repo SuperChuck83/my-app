@@ -10,6 +10,10 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import React, { useMemo } from "react";
 import { makeStyles } from "tss-react/mui";
@@ -17,8 +21,19 @@ import { useReadBodac } from "../datafetch/bodacStore";
 import { bodacRequest, bodacRecords } from "../domain/bodacRequest";
 import { EnumFamilleAvis_Lib } from "../domain/EnumFamilleAvis_Lib";
 import { isSiretValid } from "../helper/GenericFunction";
+import SavedSearchRoundedIcon from "@mui/icons-material/SavedSearchRounded";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const useStyles = makeStyles()(() => ({}));
+const useStyles = makeStyles()(() => ({
+  siretListContainer: {
+    overflow: "hidden",
+    overflowX: "auto",
+  },
+  accordionSiret:{
+    marginLeft:"16px",
+    paddingBottom:"0px"
+  }
+}));
 
 interface siretLocal {
   siret: string;
@@ -51,9 +66,8 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
   };
 
   const UpdateElementNameInLocalStorage = (_siret: string, _nom: string) => {
-    if(!_nom)
-    {
-      return; 
+    if (!_nom) {
+      return;
     }
 
     const ListElement: siretLocal[] =
@@ -81,8 +95,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
 
   const localKey = "listSiretSearch";
 
-
-  //=> click sur le bouton rechercher 
+  //=> click sur le bouton rechercher
   const onClickRechercher = async () => {
     if (SiretOnError) {
       return;
@@ -91,8 +104,8 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     AddElementInLocalStorage(siret);
 
     const refine = {
-      familleavis_lib : filterFamilleAvis !== "" ? filterFamilleAvis : undefined,
-    }
+      familleavis_lib: filterFamilleAvis !== "" ? filterFamilleAvis : undefined,
+    };
 
     const response = await callBodac(siret, refine);
 
@@ -117,7 +130,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
   const [siret, setSiret] = React.useState<string>("");
   const onBlurSiret = (event: any) => {
     let siret = event.target.value;
-    siret = siret.replace(/ /g, "").substring(0,9);
+    siret = siret.replace(/ /g, "").substring(0, 9);
     setSiret(siret);
   };
 
@@ -131,8 +144,51 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
 
   return (
     <Paper elevation={2}>
-      <Box width="100%" minHeight="800px" padding={3}>
-        <Box pt={2}>
+      <Box width="100%" minHeight="800px" padding={0}>
+        <Box>
+          <Accordion defaultExpanded elevation={0}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Grid container alignItems="center">
+                <Grid item>
+                  <Box height="20px">
+                    <Typography color="GrayText" variant="caption">
+                      <SavedSearchRoundedIcon />
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Typography color="GrayText" variant="caption">
+                    Sélectionner un siret déjà recherché
+                  </Typography>
+                </Grid>
+              </Grid>
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionSiret}>
+              <Grid
+                container
+                spacing={2}
+                width={"100%"}
+                className={classes.siretListContainer}
+                wrap="nowrap"
+                pb={2}
+              >
+                {listSiret.map((sire: siretLocal, index: number) => (
+                  <Grid item key={index}>
+                    <Chip
+                      label={sire.nom + " - " + sire.siret}
+                      variant="outlined"
+                      onDelete={() => {}}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+
           <Grid container alignItems={"center"} spacing={2}>
             <Grid item>
               <TextField
@@ -162,19 +218,6 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
               <Button variant="contained" onClick={onClickTest}>
                 test
               </Button>
-              <Box>
-                {listSiret.map((sire: siretLocal, index: number) => (
-                  <Box key={index}>
-                    <Chip
-                      label={sire.nom + " - " + sire.siret}
-                      variant="outlined"
-                      onDelete={() => {}}
-                    />
-                  </Box>
-                ))}
-              </Box>
-
-              <Box></Box>
 
               <Box>
                 <FormControl fullWidth>
@@ -192,9 +235,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
                       setfilterFamilleAvis(event.target.value as string);
                     }}
                   >
-                    <MenuItem value="">
-                      Tous
-                    </MenuItem>
+                    <MenuItem value="">Tous</MenuItem>
                     {(
                       Object.keys(EnumFamilleAvis_Lib) as Array<
                         keyof typeof EnumFamilleAvis_Lib
