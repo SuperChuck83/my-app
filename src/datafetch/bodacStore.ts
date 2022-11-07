@@ -4,16 +4,17 @@ import { bodacRequest } from "../domain/bodacRequest";
 
 export function useReadBodac(
   url: string
-): [(siret: string, refine: Object) => Promise<AxiosResponse<bodacRequest>>, string] {
+): [(siret: string, refine: Object, start: number) => Promise<AxiosResponse<bodacRequest>>, string] {
   const instance = axios.create({
     baseURL: "https://bodacc-datadila.opendatasoft.com/api/records/1.0/search",
   });
 
-  const call = (siret: string, refine : Object) => {
+  const call = (siret: string, refine : Object, start: number) => {
     const params = {
       dataset: "annonces-commerciales",
       q: siret,
-      limit: 10,
+      rows: 15,
+      start: start,
       refine: refine,
       sort: "dateparution",
       facet: ["1", "2"],

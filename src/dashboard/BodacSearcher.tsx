@@ -114,11 +114,16 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
   const [callBodac] = useReadBodac("test");
 
 
+  const nbResultByPage = 15;
+  const [start, setStart] = React.useState<number>(0);
 
   //=> click sur le bouton rechercher
-  const onClickRechercher = async () => {
+  const onClickRechercher = async (_start: number) => {
     if (SiretOnError) {
       return;
+    }
+    if (_start === 0) {
+      setStart(0);
     }
 
     AddElementInLocalStorage(siret);
@@ -127,7 +132,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
       familleavis_lib: filterFamilleAvis !== "" ? filterFamilleAvis : undefined,
     };
 
-    const response = await callBodac(siret, refine);
+    const response = await callBodac(siret, refine, _start);
 
     if (response.status === 200) {
       const records = response.data.records;
@@ -184,13 +189,34 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
   }
   React.useEffect(() => {
     if (chipsFlag > 0) {
-      onClickRechercher();
+      onClickRechercher(0);
     }
   }, [chipsFlag]);
 
   React.useEffect(() => {
     setListSiret(GetElementInLocalStorage());
   }, []);
+
+
+  const onClickNextResult = () => {
+
+    setStart((prevvalue) => {
+      const test = prevvalue + nbResultByPage;
+      onClickRechercher(test);
+      return test;
+    })
+  }
+
+  const onClickPreviousResult = () => {
+
+    setStart((prevvalue) => {
+      const test = prevvalue - nbResultByPage;
+      onClickRechercher(test);
+      return test;
+    })
+  }
+
+
 
   return (
     <Paper elevation={2}>
@@ -297,7 +323,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
                 <Grid item>
                   <Button
                     variant="contained"
-                    onClick={onClickRechercher}
+                    onClick={() => { onClickRechercher(0); }}
                     disabled={SiretOnError || !siret}
                   >
                     Rechercher
@@ -311,13 +337,23 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
             </Grid>
             <Grid item>
 
-              <IconButton aria-label="next">
-                <ArrowBackIosNewRoundedIcon />
-              </IconButton>
-              0 à 10 sur {allRecordNumber}
-              <IconButton aria-label="next">
-                <ArrowForwardIosRoundedIcon />
-              </IconButton>
+              {
+                allRecordNumber !== undefined &&
+                <Box>
+                  <IconButton aria-label="next" onClick={onClickPreviousResult} sx={{ visibility: start > 0 ? "visible" : "hidden" }}>
+                    <ArrowBackIosNewRoundedIcon />
+                  </IconButton>
+
+                  {start + 1} à {(start + nbResultByPage) > allRecordNumber ? allRecordNumber : (start + nbResultByPage)} sur {allRecordNumber}
+
+
+                  <IconButton aria-label="next" sx={{ visibility: start + nbResultByPage <= allRecordNumber ? "visible" : "hidden" }}>
+                    <ArrowForwardIosRoundedIcon onClick={onClickNextResult} />
+                  </IconButton>
+
+                </Box>
+              }
+
             </Grid>
           </Grid>
         </Box>
