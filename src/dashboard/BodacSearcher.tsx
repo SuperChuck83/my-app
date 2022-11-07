@@ -23,15 +23,16 @@ import { EnumFamilleAvis_Lib } from "../domain/EnumFamilleAvis_Lib";
 import { isSiretValid } from "../helper/GenericFunction";
 import SavedSearchRoundedIcon from "@mui/icons-material/SavedSearchRounded";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AlertDialog from "./AlertDialog";
 
 const useStyles = makeStyles()(() => ({
   siretListContainer: {
     overflow: "hidden",
     overflowX: "auto",
   },
-  accordionSiret:{
-    marginLeft:"16px",
-    paddingBottom:"0px"
+  accordionSiret: {
+    marginLeft: "16px",
+    paddingBottom: "0px"
   }
 }));
 
@@ -44,13 +45,12 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
   const { classes } = useStyles();
   const [result, setResult] = React.useState<bodacRecords[]>([]);
 
-  const [filterFamilleAvis, setfilterFamilleAvis] = React.useState<string>(
-    "Procédures de conciliation"
-  );
+  const [filterFamilleAvis, setfilterFamilleAvis] = React.useState<string>(); //"Procédures de conciliation"
+  const localKey = "listSiretSearch";
 
   const AddElementInLocalStorage = (_siret: string) => {
     const ListElement: siretLocal[] =
-      JSON.parse(localStorage.getItem(localKey) ?? "") ?? [];
+      JSON.parse(localStorage.getItem(localKey) ?? "null") ?? [];
     const isSiretExist =
       ListElement.filter((x) => {
         return x.siret === _siret;
@@ -59,8 +59,6 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     if (!isSiretExist) {
       ListElement.push({ siret: _siret, nom: "" });
     }
-
-    debugger;
     //sauvegarde de la liste de siret
     localStorage.setItem(localKey, JSON.stringify(ListElement));
   };
@@ -71,7 +69,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     }
 
     const ListElement: siretLocal[] =
-      JSON.parse(localStorage.getItem(localKey) ?? "") ?? [];
+      JSON.parse(localStorage.getItem(localKey) ?? "null") ?? [];
 
     const newList = ListElement.map((x) => {
       if (x.siret === _siret && !x.nom) {
@@ -83,9 +81,25 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     localStorage.setItem(localKey, JSON.stringify(newList));
   };
 
+  const DeleteElementInLocalStorage = (_siret: string) => {
+    const ListElement: siretLocal[] =
+      JSON.parse(localStorage.getItem(localKey) ?? "null") ?? [];
+    const isSiretExist =
+      ListElement.findIndex((x) => { return x.siret === _siret });
+    debugger;
+    if (isSiretExist !== -1) {
+      //sauvegarde de la liste de siret
+      ListElement.splice(isSiretExist, 1); 
+      localStorage.setItem(localKey, JSON.stringify(ListElement));
+    }
+
+  };
+
+
   const GetElementInLocalStorage = () => {
     const ListElement: siretLocal[] =
-      JSON.parse(localStorage.getItem(localKey) ?? "") ?? [];
+      JSON.parse(localStorage.getItem(localKey) ?? "null") ?? [];
+
     return ListElement;
   };
 
@@ -93,7 +107,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
 
   const [callBodac] = useReadBodac("test");
 
-  const localKey = "listSiretSearch";
+
 
   //=> click sur le bouton rechercher
   const onClickRechercher = async () => {
@@ -133,10 +147,40 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     siret = siret.replace(/ /g, "").substring(0, 9);
     setSiret(siret);
   };
+ 
 
   const SiretOnError = useMemo(() => {
     return !isSiretValid(siret);
   }, [siret]);
+
+  //=> click sur la croix d'une chips
+  const [openModal, setOpenModal] = React.useState(false);
+  const [siretToDelete, setSiretToDelete] = React.useState("");
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  }
+  const handleValidateModal = () => {
+    setOpenModal(false);
+    DeleteElementInLocalStorage(siretToDelete);
+    setListSiret(GetElementInLocalStorage());
+    setSiretToDelete("");
+  }
+  const onClickDeleteChips = async (siret: string) => {
+    setSiretToDelete(siret);
+    setOpenModal(true);
+  }
+  //click sur chips
+  const [chipsFlag, setChipsFlag] = React.useState(0); 
+  const onClickChips = async (siret: string) => {
+    setSiret(siret);
+    setChipsFlag((prevalue) => { return prevalue + 1;});
+  }
+  React.useEffect(() => {
+    if(chipsFlag > 0 )
+    {
+      onClickRechercher();
+    }
+  }, [chipsFlag]);
 
   React.useEffect(() => {
     setListSiret(GetElementInLocalStorage());
@@ -181,7 +225,8 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
                     <Chip
                       label={sire.nom + " - " + sire.siret}
                       variant="outlined"
-                      onDelete={() => {}}
+                      onDelete={() => { onClickDeleteChips(sire.siret) }}
+                      onClick={() => { onClickChips(sire.siret) }}
                     />
                   </Grid>
                 ))}
@@ -197,7 +242,8 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
                 variant="outlined"
                 size="small"
                 inputProps={{ maxLength: 14 }}
-                onBlur={onBlurSiret}
+                onChange={onBlurSiret}
+                value={siret}
                 error={SiretOnError}
                 helperText={
                   SiretOnError ? (
@@ -261,6 +307,10 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
           </Box>
         ))}
       </Box>
+
+      <AlertDialog openModal={openModal} handleCloseModal={handleCloseModal} handleValidateModal={handleValidateModal} />
+
+
     </Paper>
   );
 };
