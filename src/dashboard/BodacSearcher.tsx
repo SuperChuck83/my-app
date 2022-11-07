@@ -237,7 +237,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
             </AccordionDetails>
           </Accordion>
 
-          <Grid container justifyContent="space-between" spacing={2}>
+          <Grid container justifyContent="space-between" spacing={2} padding={2}>
             <Grid item>
               <Grid container alignItems={"center"} justifyContent="space-between" spacing={2}>
                 <Grid item>
