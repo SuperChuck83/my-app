@@ -14,6 +14,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
 } from "@mui/material";
 import React, { useMemo } from "react";
 import { makeStyles } from "tss-react/mui";
@@ -24,6 +25,8 @@ import { isSiretValid } from "../helper/GenericFunction";
 import SavedSearchRoundedIcon from "@mui/icons-material/SavedSearchRounded";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AlertDialog from "./AlertDialog";
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 
 const useStyles = makeStyles()(() => ({
   siretListContainer: {
@@ -90,7 +93,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     debugger;
     if (isSiretExist !== -1) {
       //sauvegarde de la liste de siret
-      ListElement.splice(isSiretExist, 1); 
+      ListElement.splice(isSiretExist, 1);
       localStorage.setItem(localKey, JSON.stringify(ListElement));
     }
 
@@ -148,7 +151,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     siret = siret.replace(/ /g, "").substring(0, 9);
     setSiret(siret);
   };
- 
+
 
   const SiretOnError = useMemo(() => {
     return !isSiretValid(siret);
@@ -171,14 +174,13 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
     setOpenModal(true);
   }
   //click sur chips
-  const [chipsFlag, setChipsFlag] = React.useState(0); 
+  const [chipsFlag, setChipsFlag] = React.useState(0);
   const onClickChips = async (siret: string) => {
     setSiret(siret);
-    setChipsFlag((prevalue) => { return prevalue + 1;});
+    setChipsFlag((prevalue) => { return prevalue + 1; });
   }
   React.useEffect(() => {
-    if(chipsFlag > 0 )
-    {
+    if (chipsFlag > 0) {
       onClickRechercher();
     }
   }, [chipsFlag]);
@@ -235,68 +237,84 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
             </AccordionDetails>
           </Accordion>
 
-          <Grid container alignItems={"center"} spacing={2}>
+          <Grid container justifyContent="space-between" spacing={2}>
             <Grid item>
-              <TextField
-                id="outlined-basic"
-                label="SIREN"
-                variant="outlined"
-                size="small"
-                inputProps={{ maxLength: 14 }}
-                onChange={onBlurSiret}
-                value={siret}
-                error={SiretOnError}
-                helperText={
-                  SiretOnError ? (
-                    <Box height="0px"> Siren invalide </Box>
-                  ) : undefined
-                }
-              />
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                onClick={onClickRechercher}
-                disabled={SiretOnError || !siret}
-              >
-                Rechercher
-              </Button>
+              <Grid container alignItems={"center"} justifyContent="space-between" spacing={2}>
+                <Grid item>
+                  <TextField
+                    id="outlined-basic"
+                    label="SIREN"
+                    variant="outlined"
+                    size="small"
+                    inputProps={{ maxLength: 14 }}
+                    onChange={onBlurSiret}
+                    value={siret}
+                    error={SiretOnError}
+                    helperText={
+                      SiretOnError ? (
+                        <Box height="0px"> Siren invalide </Box>
+                      ) : undefined
+                    }
+                  />
+                </Grid>
+                <Grid item>
+                  <Box width="200px">
 
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label" shrink>
+                        Famille avis
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        notched
+                        value={filterFamilleAvis}
+                        label="Famille avis"
+                        size="small"
+                        onChange={(event: SelectChangeEvent) => {
+                          setfilterFamilleAvis(event.target.value as string);
+                        }}
+                      >
+                        <MenuItem value="">Tous</MenuItem>
+                        {(
+                          Object.keys(EnumFamilleAvis_Lib) as Array<
+                            keyof typeof EnumFamilleAvis_Lib
+                          >
+                        ).map((element, key) => {
+                          return (
+                            <MenuItem value={EnumFamilleAvis_Lib[element]}>
+                              {EnumFamilleAvis_Lib[element]}{" "}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    onClick={onClickRechercher}
+                    disabled={SiretOnError || !siret}
+                  >
+                    Rechercher
+                  </Button>
+                  {/* 
               <Button variant="contained" onClick={onClickTest}>
                 test
-              </Button>
+              </Button> */}
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
 
-              <Box>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label" shrink>
-                    Famille avis
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    notched
-                    value={filterFamilleAvis}
-                    label="Famille avis"
-                    size="small"
-                    onChange={(event: SelectChangeEvent) => {
-                      setfilterFamilleAvis(event.target.value as string);
-                    }}
-                  >
-                    <MenuItem value="">Tous</MenuItem>
-                    {(
-                      Object.keys(EnumFamilleAvis_Lib) as Array<
-                        keyof typeof EnumFamilleAvis_Lib
-                      >
-                    ).map((element, key) => {
-                      return (
-                        <MenuItem value={EnumFamilleAvis_Lib[element]}>
-                          {EnumFamilleAvis_Lib[element]}{" "}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
+              <IconButton aria-label="next">
+                <ArrowBackIosNewRoundedIcon />
+              </IconButton>
+              10 / 250
+              <IconButton aria-label="next">
+                <ArrowForwardIosRoundedIcon />
+              </IconButton>
             </Grid>
           </Grid>
         </Box>
