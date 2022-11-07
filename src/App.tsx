@@ -91,7 +91,7 @@ const App: React.FunctionComponent<{}> = () => {
       <Box className={classes.root}  >
         <Particles id="tsparticles" options={options} init={particlesInit} style={{ position: "absolute", zIndex: 1 }} />
         <Box sx={{ position: "relative", zIndex: 2 }} height="100%" >
-          <Box width="100%" height="65px" sx={{ backgroundColor: isScrollonTop ? "white" : "rgba(255,255,255,0.8)", position: "absolute", top: 0, paddingTop: "9px" }}>
+          <Box width="100%" height="55px" sx={{ backgroundColor: isScrollonTop ? "white" : "rgba(255,255,255,1)", position: "absolute", top: 0, paddingTop: "9px", zIndex: 9999, boxShadow: !isScrollonTop ? "0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.20)" : undefined }}>
             <Grid container justifyContent={"space-between"} alignItems="center" height="100%" spacing={2} pl={2}>
               <Grid item>
                 <Grid container alignItems={"center"} spacing={2}>
@@ -99,15 +99,19 @@ const App: React.FunctionComponent<{}> = () => {
                     <img src={roadmapLogo} alt="recipe thumbnail" width="25px" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="h6" >
-                      Bodaac searcher
+                    <Typography variant="h6" component="span">
+                     Suivi BODACC 
+                    </Typography>
+                    {" "}
+                    <Typography variant="caption" color="GrayText" component="span" >
+                      Bulletin officiel des annonces civiles et commerciales 
                     </Typography>
                   </Grid>
                 </Grid>
 
               </Grid>
               <Grid item>
-                Bodaac searcher
+                
               </Grid>
               <Grid item>
                 <Button variant="text" disabled={langageId === EnumLangage.Francais} onClick={ChangeLangageToFrench}>Fr</Button>

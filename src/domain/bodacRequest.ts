@@ -70,6 +70,12 @@ interface bodacFields {
     parutionavisprecedent: string
 
 
+    modificationsgenerales: string,
+}
+
+
+export interface modificationGen {
+    descriptif: string,
 }
 
 //non utilisé
@@ -78,7 +84,7 @@ interface bodacDepot {
     typeDepot : string, 
 }
 
-interface listepersonnes {
+export interface listepersonnes {
     personne: personne,
 }
 interface personne {

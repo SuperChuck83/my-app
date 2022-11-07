@@ -220,7 +220,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
 
   return (
     <Paper elevation={2}>
-      <Box width="100%" minHeight="800px" padding={0}>
+      <Box width="100%" minHeight="800px" padding={0} pb={2}>
         <Box>
           <Accordion defaultExpanded elevation={0}>
             <AccordionSummary
