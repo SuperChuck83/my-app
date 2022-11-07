@@ -41,6 +41,7 @@ interface siretLocal {
   nom: string;
 }
 
+//test
 const BodacSearcher: React.FunctionComponent<{}> = () => {
   const { classes } = useStyles();
   const [result, setResult] = React.useState<bodacRecords[]>([]);
