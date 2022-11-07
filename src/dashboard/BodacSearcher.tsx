@@ -27,6 +27,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AlertDialog from "./AlertDialog";
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import AnnonceCard from "./AnnonceCard";
 
 const useStyles = makeStyles()(() => ({
   siretListContainer: {
@@ -48,6 +49,7 @@ interface siretLocal {
 const BodacSearcher: React.FunctionComponent<{}> = () => {
   const { classes } = useStyles();
   const [result, setResult] = React.useState<bodacRecords[]>([]);
+  const [allRecordNumber, setAllRecordNumber] = React.useState<number | undefined>(undefined);
 
   const [filterFamilleAvis, setfilterFamilleAvis] = React.useState<string>(); //"Procédures de conciliation"
   const localKey = "listSiretSearch";
@@ -136,6 +138,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
       );
       setListSiret(GetElementInLocalStorage());
       setResult(response.data.records);
+      setAllRecordNumber(response.data.nhits);
       debugger;
     }
   };
@@ -311,7 +314,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
               <IconButton aria-label="next">
                 <ArrowBackIosNewRoundedIcon />
               </IconButton>
-              10 / 250
+              0 à 10 sur {allRecordNumber}
               <IconButton aria-label="next">
                 <ArrowForwardIosRoundedIcon />
               </IconButton>
@@ -320,11 +323,19 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
         </Box>
 
         {/* tableau des elements  */}
-        {result.map((line: bodacRecords, index: number) => (
-          <Box key={index}>
-            {line.fields.dateparution} {line.fields.familleavis_lib}
-          </Box>
-        ))}
+
+        <Grid container spacing={2} paddingLeft={3} paddingRight={3} >
+
+          {result.map((line: bodacRecords, index: number) => (
+            <Grid item>
+              <AnnonceCard Annonce={line} />
+            </Grid>
+          ))}
+
+
+        </Grid>
+
+
       </Box>
 
       <AlertDialog openModal={openModal} handleCloseModal={handleCloseModal} handleValidateModal={handleValidateModal} />

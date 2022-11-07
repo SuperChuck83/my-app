@@ -39,6 +39,7 @@ interface bodacFacetGroups {
 interface bodacFields {
     publicationavis: string,
     listepersonnes : string,
+    jugement: string, 
     id: string,
     registre: string,
     depot: string,
@@ -60,6 +61,15 @@ interface bodacFields {
     familleavis: string,
     departement_nom_officiel: string, 
     numerodepartement: string,
+    
+    //depot des comptes uniquement
+    listeprecedentexploitant: string,
+    //vente et cessions 
+    listeprecedentproprietaire: string, 
+    divers:string,
+    parutionavisprecedent: string
+
+
 }
 
 //non utilisé
