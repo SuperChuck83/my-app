@@ -347,7 +347,7 @@ const BodacSearcher: React.FunctionComponent<{}> = () => {
                   {start + 1} à {(start + nbResultByPage) > allRecordNumber ? allRecordNumber : (start + nbResultByPage)} sur {allRecordNumber}
 
 
-                  <IconButton aria-label="next" sx={{ visibility: start + nbResultByPage <= allRecordNumber ? "visible" : "hidden" }}>
+                  <IconButton aria-label="next" sx={{ visibility: start + nbResultByPage < allRecordNumber ? "visible" : "hidden" }}>
                     <ArrowForwardIosRoundedIcon onClick={onClickNextResult} />
                   </IconButton>
 

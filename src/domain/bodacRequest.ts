@@ -1,8 +1,8 @@
 export interface bodacRequest {
     nhits: number,
-    parameters : bodacParameters,
-    records: bodacRecords[], 
-    facet_groups: bodacFacetGroups[]; 
+    parameters: bodacParameters,
+    records: bodacRecords[],
+    facet_groups: bodacFacetGroups[];
 }
 
 interface bodacParameters {
@@ -18,28 +18,28 @@ interface bodacParameters {
 export interface bodacRecords {
     datasetid: string,
     recordid: string,
-    fields :  bodacFields, 
+    fields: bodacFields,
     record_timestamp: Date
 }
 
 
 interface bodacFacet {
-   name: string,
-   count: number,
-   state: string,
-   path: string
+    name: string,
+    count: number,
+    state: string,
+    path: string
 }
 
 interface bodacFacetGroups {
     name: string,
-    facet : bodacFacet, 
+    facet: bodacFacet,
 }
 
 
 interface bodacFields {
     publicationavis: string,
-    listepersonnes : string,
-    jugement: string, 
+    listepersonnes: string,
+    jugement: string,
     id: string,
     registre: string,
     depot: string,
@@ -59,18 +59,19 @@ interface bodacFields {
     typeavis: string,
     familleavis_lib: string,
     familleavis: string,
-    departement_nom_officiel: string, 
+    departement_nom_officiel: string,
     numerodepartement: string,
-    
+
     //depot des comptes uniquement
     listeprecedentexploitant: string,
     //vente et cessions 
-    listeprecedentproprietaire: string, 
-    divers:string,
+    listeprecedentproprietaire: string,
+    divers: string,
     parutionavisprecedent: string
 
 
     modificationsgenerales: string,
+
 }
 
 
@@ -81,7 +82,7 @@ export interface modificationGen {
 //non utilisé
 interface bodacDepot {
     dateCloture: Date,
-    typeDepot : string, 
+    typeDepot: string,
 }
 
 export interface listepersonnes {
@@ -92,14 +93,24 @@ interface personne {
     adresseSiegeSocial: adresse,
     formeJuridique: string,
     numeroImmatriculation: immatriculation,
-    denomination: string
+    denomination: string,
+
+    //pour pp 
+    nom: string,
+    prenom: string,
+    adressePP: adresse,
+    activite: string,
+    enseigne: string,
+
+
+
 }
 interface adresse {
     ville: string,
     pays: string,
     typeVoie: string,
     codePostal: string,
-    numeroVoie: string, 
+    numeroVoie: string,
     nomVoie: string
 }
 
@@ -107,4 +118,17 @@ interface immatriculation {
     codeRCS: string,
     numeroIdentification: string,
     nomGreffeImmat: string,
+}
+
+
+export interface jugementData {
+    data: string,
+    complementJugement: string,
+    type: string,
+    famille: string,
+    nature: string,
+
+
+
+
 }

@@ -51,20 +51,15 @@ const AnnonceCard: React.FunctionComponent<{ Annonce: bodacRecords }> = (props) 
               </Typography>
 
               <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                
+
                 {modifGeneral &&
-                
-                  " - " +modifGeneral.descriptif
+
+                  " - " + modifGeneral.descriptif
                 }
               </Typography>
 
 
             </Box>
-
-
-
-
-            {Annonce.fields.jugement}
 
             <Box>
 
@@ -81,9 +76,18 @@ const AnnonceCard: React.FunctionComponent<{ Annonce: bodacRecords }> = (props) 
                   }
                 </Grid>
                 <Grid item>
-                  <Typography color="GrayText" variant="body2" sx={{ fontWeight: "bold" }}>
-                    {listePersonne.personne.denomination}
-                  </Typography>
+
+                  {
+                    listePersonne.personne.typePersonne === "pm" ?
+                      <Typography color="GrayText" variant="body2" sx={{ fontWeight: "bold" }}>
+                        {listePersonne.personne.denomination}
+                      </Typography>
+                      :
+                      <Typography color="GrayText" variant="body2" sx={{ fontWeight: "bold" }}>
+                        {Annonce.fields.commercant}
+                      </Typography>
+                  }
+
 
                 </Grid>
                 <Grid item>
@@ -130,7 +134,11 @@ const AnnonceCard: React.FunctionComponent<{ Annonce: bodacRecords }> = (props) 
               </Typography>
             </Grid>
             <Grid item>
-              <Button size="small">Voir plus</Button>
+              {
+                Annonce.fields.jugement &&
+                <Button size="small" color='error' sx={{ fontWeight: "bold" }}>Voir le jugement</Button>
+              }
+
             </Grid>
           </Grid>
 
