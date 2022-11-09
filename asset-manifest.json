@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/my-app/static/css/main.1d239de5.css",
-    "main.js": "/my-app/static/js/main.b12a60fc.js",
+    "main.js": "/my-app/static/js/main.6e33199e.js",
     "static/js/787.5a1960e3.chunk.js": "/my-app/static/js/787.5a1960e3.chunk.js",
     "static/media/Sacramento-Regular.ttf": "/my-app/static/media/Sacramento-Regular.5bd7d5208f7a9c18fe22.ttf",
     "index.html": "/my-app/index.html",
     "main.1d239de5.css.map": "/my-app/static/css/main.1d239de5.css.map",
-    "main.b12a60fc.js.map": "/my-app/static/js/main.b12a60fc.js.map",
+    "main.6e33199e.js.map": "/my-app/static/js/main.6e33199e.js.map",
     "787.5a1960e3.chunk.js.map": "/my-app/static/js/787.5a1960e3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1d239de5.css",
-    "static/js/main.b12a60fc.js"
+    "static/js/main.6e33199e.js"
   ]
 }
