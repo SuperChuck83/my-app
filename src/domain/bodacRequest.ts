@@ -82,6 +82,15 @@ interface bodacFields {
 }
 
 
+export interface radiationaurcs {
+    radiationPP: radiationPP, 
+    radiationPM: string,
+
+}
+export interface radiationPP {
+    dateCessationActivitePP: string, 
+}
+
 export interface listeetablissements {
     etablissement: etablissement, 
 
@@ -100,7 +109,8 @@ export interface acte {
     descriptif: string, 
     dateCommencementActivite: string,
     immatriculation: immatriculation_acte, 
-    creation: creation
+    creation: creation,
+    vente: vente_acte
 
 }
 
@@ -108,6 +118,19 @@ export interface acte {
 export interface creation {
     categorieCreation: string,
 }
+
+
+export interface vente_acte {
+    publiciteLegale: publiciteLegale,
+    categorieVente: string,
+    opposition: string,
+}
+
+export interface publiciteLegale {
+    date: string,
+    titre: string
+}
+
 
 
 export interface immatriculation_acte {
@@ -163,7 +186,7 @@ interface immatriculation {
 
 
 export interface jugementData {
-    data: string,
+    date: string,
     complementJugement: string,
     type: string,
     famille: string,

@@ -188,7 +188,7 @@ const AnnonceCard: React.FunctionComponent<{ Annonce: bodacRecords }> = (
                 </Button>
               )}
 
-              {(Annonce.fields.acte || Annonce.fields.radiationaurcs )   && (
+              {(Annonce.fields.acte || Annonce.fields.radiationaurcs || Annonce.fields.listeetablissements  )   && (
                 <Button
                   size="small"
                   color="primary"

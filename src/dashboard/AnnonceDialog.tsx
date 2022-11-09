@@ -21,6 +21,7 @@ import {
   jugementData,
   listeetablissements,
   adresse,
+  radiationaurcs,
 } from "../domain/bodacRequest";
 import FmdGoodRoundedIcon from "@mui/icons-material/FmdGoodRounded";
 
@@ -57,22 +58,26 @@ const AnnonceDialog: React.FunctionComponent<{
     selectedAnnonce.fields.listeetablissements ?? null
   );
 
+  const radiationaurcs: radiationaurcs = JSON.parse(
+    selectedAnnonce.fields.radiationaurcs ?? null
+  );
+
   debugger;
 
   const getAdresse = (adresse: adresse) => {
     if (adresse) {
       return (
-        adresse.numeroVoie +
+        (adresse.numeroVoie ?? "") +
         " " +
-        adresse.typeVoie +
+        (adresse.typeVoie ?? "") +
         " " +
-        adresse.nomVoie +
+        (adresse.nomVoie ?? "") +
         " " +
-        adresse.ville +
+        (adresse.ville ?? "") +
         " " +
-        adresse.codePostal +
+        (adresse.codePostal ?? "") +
         " " +
-        adresse.complGeographique +
+        (adresse.complGeographique ?? "") +
         " " +
         (adresse.pays ?? "")
       );
@@ -91,6 +96,7 @@ const AnnonceDialog: React.FunctionComponent<{
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
+          {/* JUGEMENT */}
           {jugement && (
             <>
               <Typography color="GrayText" variant="h6">
@@ -100,9 +106,17 @@ const AnnonceDialog: React.FunctionComponent<{
               <Typography color="GrayText" variant="body2">
                 {jugement.complementJugement}
               </Typography>
+
+              <Box sx={{ textAlign: "right" }} pt={2}>
+                <Chip
+                  label={moment(jugement.date).format("DD MM YYYY")}
+                  variant="outlined"
+                />
+              </Box>
             </>
           )}
 
+          {/* ACTE */}
           {acte && (
             <>
               <Box width="100%">
@@ -166,30 +180,85 @@ const AnnonceDialog: React.FunctionComponent<{
                 </Grid>
               </Grid>
               <Box pt={2}>
+                <Typography
+                  color="GrayText"
+                  variant="body2"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  Descriptif
+                </Typography>
                 <Typography color="GrayText" variant="caption">
                   {acte.descriptif}
                 </Typography>
               </Box>
+
+              {acte.vente && (
+                <Box pt={2}>
+                  <Typography
+                    color="GrayText"
+                    variant="body2"
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    Vente
+                  </Typography>
+
+                  {acte.vente.publiciteLegale && (
+                    <Box pt={1} pl={2}>
+                      <Typography
+                        color="GrayText"
+                        variant="caption"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        Publicité légale ( date et titre )
+                      </Typography>
+                      <Typography color="GrayText" variant="body2">
+                        <Chip
+                          label={moment(acte.vente.publiciteLegale.date).format(
+                            "DD MM YYYY"
+                          )}
+                          variant="outlined"
+                        />{" "}
+                        {"  "}
+                        {acte.vente.publiciteLegale.titre}
+                      </Typography>
+                    </Box>
+                  )}
+                  {acte.vente.categorieVente && (
+                    <Box pt={1} pl={2}>
+                      <Typography
+                        color="GrayText"
+                        variant="caption"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        Catégorie de la vente
+                      </Typography>
+                      <Typography color="GrayText" variant="body2">
+                        {acte.vente.categorieVente}
+                      </Typography>
+                    </Box>
+                  )}
+                  {acte.vente.opposition && (
+                    <Box pt={1} pl={2}>
+                      <Typography
+                        color="GrayText"
+                        variant="caption"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        Opposition
+                      </Typography>
+                      <Typography color="GrayText" variant="body2">
+                        {acte.vente.opposition}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+              )}
             </>
           )}
 
+          {/* //LIST ETABLISSEMENT */}
           {listeetablissements && (
             <>
-              {listeetablissements.etablissement.qualiteEtablissement && (
-                <Typography color="GrayText" variant="body2">
-                  {listeetablissements.etablissement.qualiteEtablissement}
-                  <Tooltip
-                    title={getAdresse(
-                      listeetablissements.etablissement.adresse
-                    )}
-                  >
-                    <IconButton aria-label="adress">
-                      <FmdGoodRoundedIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Typography>
-              )}
-
               <Box pt={1}>
                 <Typography
                   color="GrayText"
@@ -221,10 +290,61 @@ const AnnonceDialog: React.FunctionComponent<{
               )}
             </>
           )}
+
+          {/* Radiation */}
+          {radiationaurcs && (
+            <>
+              <Typography
+                color="GrayText"
+                variant="body2"
+                sx={{ fontWeight: "bold", paddingRight: "16px" }}
+                component="span"
+              >
+                Radiation
+              </Typography>
+
+              <Typography color="GrayText" variant="body2" component="span">
+                {radiationaurcs.radiationPM}
+
+                {radiationaurcs.radiationPP?.dateCessationActivitePP && (
+                  <Chip
+                    label={moment(
+                      radiationaurcs.radiationPP?.dateCessationActivitePP
+                    ).format("DD MM YYYY")}
+                    variant="outlined"
+                  />
+                )}
+              </Typography>
+            </>
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Fermer</Button>
+        <Grid container justifyContent={"space-between"}>
+          <Grid item pl={2}>
+            {listeetablissements && (
+              <>
+                {listeetablissements.etablissement.qualiteEtablissement && (
+                  <Typography color="GrayText" variant="body2">
+                    {listeetablissements.etablissement.qualiteEtablissement}
+                    <Tooltip
+                      title={getAdresse(
+                        listeetablissements.etablissement.adresse
+                      )}
+                    >
+                      <IconButton aria-label="adress">
+                        <FmdGoodRoundedIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                )}
+              </>
+            )}
+          </Grid>
+          <Grid item>
+            <Button onClick={handleClose}>Fermer</Button>
+          </Grid>
+        </Grid>
       </DialogActions>
     </Dialog>
   );
