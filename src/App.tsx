@@ -120,14 +120,15 @@ const App: React.FunctionComponent<{}> = () => {
             </Grid>
           </Box>
           <Box sx={{ height: "100%", paddingTop: "75px", overflow: "auto" }} onScroll={handleScroll}>
-            <Switch>
+            {/* <Switch>
               {Routes.map((route: any, index: number) =>
                 <Route exact path={route.path} key={index}>
                   {route.component}
                 </Route>
               )}
               <Route component={() => { return (<>Page not found</>) }} />
-            </Switch>
+            </Switch> */}
+            <Dashboard />
           </Box>
         </Box>
       </Box>
