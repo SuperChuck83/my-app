@@ -11,7 +11,7 @@ const Dashboard: React.FunctionComponent<{}> = () => {
           <BodacSearcher />
         </Grid>
       </Grid>
-     
+      
     </Box>
   );
 }
