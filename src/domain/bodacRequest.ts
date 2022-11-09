@@ -67,11 +67,51 @@ interface bodacFields {
     //vente et cessions 
     listeprecedentproprietaire: string,
     divers: string,
-    parutionavisprecedent: string
+    parutionavisprecedent: string,
 
 
     modificationsgenerales: string,
+    acte : string,
 
+    listeetablissements: string, 
+
+    //radiation seulement 
+    radiationaurcs: string
+
+
+}
+
+
+export interface listeetablissements {
+    etablissement: etablissement, 
+
+}
+export interface etablissement {
+    qualiteEtablissement: string, 
+    adresse: adresse, 
+    activite: string, 
+    origineFonds: string
+
+}
+
+
+export interface acte {
+    dateImmatriculation: string,
+    descriptif: string, 
+    dateCommencementActivite: string,
+    immatriculation: immatriculation_acte, 
+    creation: creation
+
+}
+
+
+export interface creation {
+    categorieCreation: string,
+}
+
+
+export interface immatriculation_acte {
+    categorieImmatriculation: string,
 }
 
 
@@ -105,13 +145,14 @@ interface personne {
 
 
 }
-interface adresse {
+export interface adresse {
     ville: string,
     pays: string,
     typeVoie: string,
     codePostal: string,
     numeroVoie: string,
-    nomVoie: string
+    nomVoie: string,
+    complGeographique: string
 }
 
 interface immatriculation {

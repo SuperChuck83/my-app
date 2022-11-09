@@ -26,6 +26,7 @@ import AlertDialog from "./AlertDialog";
 import AnnonceCard from "./AnnonceCard";
 import SiretCacher from "./SiretCacher";
 import DoNotDisturbRoundedIcon from "@mui/icons-material/DoNotDisturbRounded";
+import AnnonceDialog from "./AnnonceDialog";
 
 const useStyles = makeStyles()(() => ({
   siretListContainer: {
